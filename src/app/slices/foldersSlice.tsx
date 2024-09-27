@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createDocument,
-  deleteDocument,
+  // deleteDocument,
   readDocuments,
-  updateDocument,
+  // updateDocument,
 } from "../controllers/hooks";
 import { docList } from "../config/firebase";
 

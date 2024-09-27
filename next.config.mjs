@@ -15,6 +15,7 @@ const nextConfig = {
   assetPrefix: assetPrefix,
   basePath: basePath,
   trailingSlash: true,
+  output: 'docs'
 };
 
 export default nextConfig;
