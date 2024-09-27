@@ -1,101 +1,80 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchItems,
+  // addItem,
+  // editItem,
+  // removeItem,
+} from "./slices/foldersSlice";
+import { AppDispatch, RootState } from "./stores/store";
+import { Flex, Layout } from "antd";
+import CardComponent from "./components/CardComponent";
+import ButtonComponent from "./components/ButtonComponent";
+import Lottie from "lottie-react";
+import animation from "../public/Loading.json";
+
+const { Content, Footer } = Layout;
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const dispatch: AppDispatch = useDispatch();
+  const folders = useSelector((state: RootState) => state.folders.data);
+  const loading = useSelector((state: RootState) => state.folders.loading);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const [showAnimation, setShowAnimation] = useState(true);
+
+  useEffect(() => {
+    dispatch(fetchItems());
+
+    const timer = setTimeout(() => {
+      setShowAnimation(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [dispatch]);
+
+  if (showAnimation || loading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Lottie
+          animationData={animation}
+          style={{ height: "300px", width: "300px" }}
+        />
+      </div>
+    );
+
+  return (
+    <Layout className="bg-transparent min-h-screen px-6 pt-6 xl:px-24">
+      <Content className="bg-transparent w-full content-center self-center">
+        <h1 className="text-3xl xl:text-5xl font-bold text-darkCornflowerBlue text-center">
+          Cyber Community Board
+        </h1>
+        <Flex
+          gap={"middle"}
+          wrap
+          justify="center"
+          className="bg-transparent py-6"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          {folders.map((folder, folderIndex) => (
+            <CardComponent
+              className="w-[300px] xl:w-[500px] min-h-[520px] max-h-[530px] flex flex-col"
+              key={folderIndex}
+              title={folder.category}
+            >
+              <div className="flex-1 overflow-y-auto">
+                {folder.data.map((item, itemIndex) => (
+                  <ButtonComponent key={itemIndex} title={item.title} />
+                ))}
+              </div>
+            </CardComponent>
+          ))}
+        </Flex>
+      </Content>
+      <Footer className="bg-transparent text-xs xl:text-base text-cornflowerBlue text-center">
+        หากมีข้อสงสัย: โปรดติดต่อแอดมิน E-MAIL strategydir.dev@gmail.com โทร. 02
+        590 3175
+      </Footer>
+    </Layout>
   );
 }

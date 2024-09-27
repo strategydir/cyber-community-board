@@ -17,7 +17,20 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5);
+  border-radius: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 @layer utilities {

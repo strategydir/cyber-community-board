@@ -11,6 +11,12 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        lavenderBlue: "#C4D7FF",
+        blond: "#FFF4B5",
+        sweet: "#FFD7C4",
+        cornflowerBlue: "#87A2FF",
+        darkCornflowerBlue: "#5A6B8C",
+        lightSweet: "#FFF2DC",
       },
     },
   },
