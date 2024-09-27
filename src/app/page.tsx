@@ -11,9 +11,9 @@ import {
 import { AppDispatch, RootState } from "./stores/store";
 import { Flex, Layout } from "antd";
 import CardComponent from "./components/CardComponent";
-import ButtonComponent from "./components/ButtonComponent";
 import animation from "../public/Loading.json";
 import dynamic from "next/dynamic";
+import LinkButtonComponent from "./components/LinkButtonComponent";
 // Dynamically import Lottie and disable SSR
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -66,7 +66,7 @@ export default function Home() {
             >
               <div className="flex-1 overflow-y-auto">
                 {folder.data.map((item, itemIndex) => (
-                  <ButtonComponent key={itemIndex} title={item.title} />
+                  <LinkButtonComponent key={itemIndex} title={item.title} link={item.link} />
                 ))}
               </div>
             </CardComponent>
