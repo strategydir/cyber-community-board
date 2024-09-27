@@ -15,7 +15,7 @@ const nextConfig = {
   assetPrefix: assetPrefix,
   basePath: basePath,
   trailingSlash: true,
-  output: 'docs'
+  output: 'export'
 };
 
 export default nextConfig;

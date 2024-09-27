@@ -12,8 +12,10 @@ import { AppDispatch, RootState } from "./stores/store";
 import { Flex, Layout } from "antd";
 import CardComponent from "./components/CardComponent";
 import ButtonComponent from "./components/ButtonComponent";
-import Lottie from "lottie-react";
 import animation from "../public/Loading.json";
+import dynamic from "next/dynamic";
+// Dynamically import Lottie and disable SSR
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const { Content, Footer } = Layout;
 
