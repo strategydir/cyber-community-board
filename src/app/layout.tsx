@@ -11,8 +11,8 @@ const fahkwang = Fahkwang({
 });
 
 export const metadata: Metadata = {
-  title: "IT Nexus File Board",
-  description: "DIR IT Nexus File Board",
+  title: "Cyber Community Board",
+  description: "DIR Cyber Community Board",
 };
 
 export default function RootLayout({
