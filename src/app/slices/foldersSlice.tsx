@@ -3,9 +3,11 @@ import {
   createDocument,
   // deleteDocument,
   readDocuments,
+  updateDocument,
   // updateDocument,
 } from "../controllers/hooks";
-import { docList } from "../config/firebase";
+
+const collectionName = "docList";
 
 interface IFileList {
   id: string;
@@ -29,26 +31,30 @@ const initialState: IFilstListState = {
 };
 
 export const fetchItems = createAsyncThunk("folders/fetch", async () => {
-  const data = await readDocuments(docList);
+  const data = await readDocuments(collectionName);
   return data;
 });
 
 export const addItem = createAsyncThunk(
   "folders/addItem",
-  async (name: unknown) => {
-    const docRef = await createDocument(docList, { name });
-    return { id: docRef?.id, name };
+  async (item: IFileList) => {
+    // const docRef =
+    await createDocument(collectionName, {
+      category: item.category,
+      data: item.data,
+    });
+    return;
   }
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// export const editItem = createAsyncThunk(
-//   "folders/editItem",
-//   async (item: IFileList) => {
-//     await updateDocument(docList, item.id as string, { name: item.name });
-//     return item;
-//   }
-// );
+export const editItem = createAsyncThunk(
+  "folders/editItem",
+  async (item: IFileList) => {
+    await updateDocument(collectionName, item.id as string, item);
+    return item;
+  }
+);
 
 // export const removeItem = createAsyncThunk(
 //   "folders/removeItem",
@@ -70,18 +76,31 @@ const foldersSlice = createSlice({
       .addCase(fetchItems.fulfilled, (state, action) => {
         state.data = action.payload as IFileList[];
         state.loading = false;
+      })
+      .addCase(addItem.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addItem.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addItem.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(editItem.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editItem.fulfilled, (state) => {
+        state.loading = false;
+        // const index = state.data.findIndex(
+        //   (item) => item.id === action.payload.id
+        // );
+        // if (index !== -1) {
+        //   state.data[index] = action.payload;
+        // }
+      })
+      .addCase(editItem.rejected, (state) => {
+        state.loading = false;
       });
-    // .addCase(addItem.fulfilled, (state, action) => {
-    //   state.data.push(action.payload as IFileList);
-    // })
-    // .addCase(editItem.fulfilled, (state, action) => {
-    //   const index = state.data.findIndex(
-    //     (item) => item.id === action.payload.id
-    //   );
-    //   if (index !== -1) {
-    //     state.data[index] = action.payload;
-    //   }
-    // })
     // .addCase(removeItem.fulfilled, (state, action) => {
     //   state.data = state.data.filter((item) => item.id !== action.payload);
     // });
