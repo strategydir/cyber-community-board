@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import foldersSlice from "../slices/foldersSlice";
+import adminSlice from "../slices/adminSlice";
 
 const store = configureStore({
   reducer: {
     folders: foldersSlice,
+    admin: adminSlice,
   },
 });
 

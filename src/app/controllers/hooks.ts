@@ -24,7 +24,6 @@ export const readDocuments = async (collectionName: string) => {
     querySnapshot.forEach((doc) => {
       documents.push({ id: doc.id, ...doc.data() });
     });
-    console.log('here', documents)
     return documents;
   } catch (error) {
     console.error("Error reading documents: ", error);
@@ -48,7 +47,7 @@ export const updateDocument = async (
 export const deleteDocument = async (collectionName: string, docId: string) => {
   try {
     const docRef = doc(db, collectionName, docId);
-    await deleteDoc(docRef)
+    await deleteDoc(docRef);
   } catch (err) {
     console.error("Error deleting document: ", err);
   }
